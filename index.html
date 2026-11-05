@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>紫微斗数 · 天命星盘</title>
+<style>
+  /* ============ 玄幻 · 星穹神话盘面 ============ */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --gold: #ffd76a;
+    --gold-dim: #c9a55a;
+    --gold-line: rgba(255, 215, 106, .35);
+    --glass: rgba(18, 14, 48, .55);
+    --ink: #f4e9d0;
+    --ink-dim: #b7a98a;
+    --red: #ff6b6b;
+    --blue: #5aa8ff;
+    --green: #4dffb0;
+    --purple: #c39bff;
+  }
+  html, body { height: 100%; }
+  body {
+    font-family: "Songti SC", "STSong", "SimSun", "Noto Serif SC", serif;
+    color: var(--ink);
+    background:
+      radial-gradient(1200px 800px at 20% 0%, rgba(88, 60, 180, .22), transparent 60%),
+      radial-gradient(1000px 700px at 85% 100%, rgba(20, 90, 120, .25), transparent 60%),
+      radial-gradient(700px 500px at 70% 20%, rgba(120, 50, 160, .12), transparent 55%),
+      linear-gradient(160deg, #0a0618 0%, #120b2e 40%, #0b1428 75%, #05060f 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  /* 星尘背景 */
+  .stars {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,.8), transparent),
+      radial-gradient(1px 1px at 33% 8%, rgba(255,255,255,.6), transparent),
+      radial-gradient(1.5px 1.5px at 48% 30%, rgba(255,215,106,.8), transparent),
+      radial-gradient(1px 1px at 64% 12%, rgba(255,255,255,.7), transparent),
+      radial-gradient(1.2px 1.2px at 78% 26%, rgba(255,215,106,.7), transparent),
+      radial-gradient(1px 1px at 90% 8%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1px 1px at 8% 55%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1.5px 1.5px at 25% 70%, rgba(255,215,106,.55), transparent),
+      radial-gradient(1px 1px at 42% 88%, rgba(255,255,255,.6), transparent),
+      radial-gradient(1px 1px at 58% 64%, rgba(255,255,255,.45), transparent),
+      radial-gradient(1.3px 1.3px at 74% 82%, rgba(160,140,255,.6), transparent),
+      radial-gradient(1px 1px at 88% 60%, rgba(255,255,255,.55), transparent),
+      radial-gradient(1px 1px at 96% 90%, rgba(255,215,106,.5), transparent),
+      radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,.35), transparent);
+    animation: twinkle 6s ease-in-out infinite alternate;
+  }
+  @keyframes twinkle { from { opacity: .65; } to { opacity: 1; } }
+
+  .wrap { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; padding: 26px 16px 60px; }
+
+  /* 标题 */
+  header { text-align: center; margin-bottom: 22px; }
+  .title {
+    font-size: clamp(30px, 5.4vw, 46px);
+    letter-spacing: .35em;
+    text-indent: .35em;
+    color: var(--gold);
+    text-shadow: 0 0 18px rgba(255, 215, 106, .55), 0 0 60px rgba(255, 180, 60, .25);
+    font-weight: 600;
+  }
+  .title small { display: block; font-size: 13px; color: var(--ink-dim); letter-spacing: .5em; text-indent: .5em; margin-top: 10px; text-shadow: 0 0 12px rgba(160, 140, 255, .6); }
+  .divider { width: 260px; margin: 14px auto 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-line), transparent); position: relative; }
+  .divider::after { content: "✦"; position: absolute; left: 50%; top: -9px; transform: translateX(-50%); color: var(--gold); text-shadow: 0 0 12px var(--gold); }
+
+  /* 输入区 */
+  .form {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: flex-end;
+    background: var(--glass);
+    border: 1px solid var(--gold-line);
+    border-radius: 14px;
+    padding: 14px 16px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 30px rgba(80, 60, 160, .18), inset 0 0 20px rgba(255, 215, 106, .05);
+  }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 12px; color: var(--ink-dim); letter-spacing: .2em; }
+  .field select, .field input {
+    background: rgba(8, 6, 26, .8);
+    border: 1px solid var(--gold-line);
+    color: var(--ink);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    min-width: 84px;
+  }
+  .field input[type="number"] { width: 88px; }
+  .field select:focus, .field input:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(255, 215, 106, .35); }
+  .btn {
+    background: linear-gradient(180deg, rgba(255, 215, 106, .22), rgba(180, 120, 40, .18));
+    border: 1px solid var(--gold-line);
+    color: var(--gold);
+    border-radius: 10px;
+    padding: 10px 26px;
+    font-size: 16px;
+    letter-spacing: .3em;
+    cursor: pointer;
+    font-family: inherit;
+    text-shadow: 0 0 10px rgba(255, 215, 106, .6);
+    transition: all .25s;
+  }
+  .btn:hover { box-shadow: 0 0 22px rgba(255, 215, 106, .45); transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+
+  /* 命盘 */
+  .board-wrap { position: relative; margin-top: 26px; }
+  .board {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, auto);
+    gap: 8px;
+    padding: 10px;
+    background: rgba(10, 8, 30, .35);
+    border: 1px solid var(--gold-line);
+    border-radius: 18px;
+    box-shadow: 0 0 60px rgba(70, 50, 160, .25), inset 0 0 40px rgba(20, 10, 50, .5);
+  }
+  /* 旋转星轨装饰 */
+  .ring { position: absolute; border-radius: 50%; pointer-events: none; border: 1px dashed rgba(160, 140, 255, .18); }
+  .ring.r1 { inset: 12%; animation: spin 160s linear infinite; }
+  .ring.r2 { inset: 22%; border-color: rgba(255, 215, 106, .12); animation: spin 220s linear infinite reverse; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .cell {
+    position: relative;
+    min-height: 118px;
+    background: var(--glass);
+    border: 1px solid rgba(255, 215, 106, .22);
+    border-radius: 12px;
+    padding: 8px 6px;
+    display: flex; flex-direction: column;
+    backdrop-filter: blur(4px);
+    transition: all .3s;
+    overflow: hidden;
+  }
+  .cell:hover { border-color: var(--gold); box-shadow: 0 0 18px rgba(255, 215, 106, .25); transform: translateY(-2px); }
+  .cell .gz { font-size: 13px; color: var(--gold-dim); letter-spacing: .1em; }
+  .cell .pname {
+    font-size: 13px; color: var(--ink-dim); margin-top: 2px; letter-spacing: .15em;
+    display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+  }
+  .tag {
+    display: inline-block; font-size: 10px; line-height: 1; padding: 2px 4px;
+    border-radius: 3px; border: 1px solid currentColor;
+  }
+  .tag.ming { color: var(--gold); border-color: var(--gold); text-shadow: 0 0 8px var(--gold); }
+  .tag.shen { color: #9adcff; border-color: #9adcff; text-shadow: 0 0 8px #9adcff; }
+  .cell .mains { margin-top: 7px; display: flex; flex-wrap: wrap; gap: 4px 8px; justify-content: center; flex: 1; align-content: flex-start; }
+  .mstar {
+    font-size: 17px; font-weight: 700; color: var(--gold);
+    text-shadow: 0 0 12px rgba(255, 215, 106, .8), 0 0 30px rgba(255, 180, 60, .3);
+    position: relative; letter-spacing: .05em;
+  }
+  .hua {
+    display: inline-block; font-size: 9px; font-weight: 400;
+    width: 12px; height: 12px; line-height: 12px; text-align: center;
+    border-radius: 50%; margin-left: 2px; vertical-align: 2px;
+    text-shadow: none;
+  }
+  .hua.lu { background: rgba(255, 80, 80, .9); color: #fff; box-shadow: 0 0 6px rgba(255, 80, 80, .8); }
+  .hua.quan { background: rgba(70, 140, 255, .9); color: #fff; box-shadow: 0 0 6px rgba(70, 140, 255, .8); }
+  .hua.ke { background: rgba(60, 220, 150, .9); color: #042; box-shadow: 0 0 6px rgba(60, 220, 150, .8); }
+  .hua.ji { background: rgba(150, 100, 230, .9); color: #fff; box-shadow: 0 0 6px rgba(150, 100, 230, .8); }
+  .cell .minors { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 2px 6px; justify-content: center; }
+  .sstar { font-size: 11px; color: #d8c39a; opacity: .92; }
+  .cell .limit { margin-top: auto; padding-top: 4px; font-size: 10px; color: rgba(180, 160, 220, .75); letter-spacing: .08em; text-align: center; }
+
+  /* 中宫 */
+  .center {
+    grid-column: 2 / 4; grid-row: 2 / 4;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    background: radial-gradient(circle at 50% 40%, rgba(60, 40, 130, .5), rgba(10, 8, 30, .6));
+    border: 1px solid rgba(255, 215, 106, .3);
+    border-radius: 50%;
+    min-height: 300px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 0 40px rgba(120, 90, 220, .3), inset 0 0 60px rgba(30, 15, 70, .7);
+    animation: centerGlow 5s ease-in-out infinite alternate;
+  }
+  @keyframes centerGlow { from { box-shadow: 0 0 30px rgba(120, 90, 220, .25), inset 0 0 60px rgba(30, 15, 70, .7); } to { box-shadow: 0 0 55px rgba(200, 170, 90, .3), inset 0 0 60px rgba(30, 15, 70, .7); } }
+  .center .lunar { font-size: 13px; color: var(--ink-dim); letter-spacing: .1em; }
+  .center .pillars { margin: 8px 0 4px; font-size: 17px; color: var(--gold); letter-spacing: .14em; text-shadow: 0 0 12px rgba(255, 215, 106, .6); }
+  .center .ju { font-size: 24px; font-weight: 700; color: #fff; letter-spacing: .2em; text-shadow: 0 0 18px rgba(255, 215, 106, .8), 0 0 50px rgba(255, 180, 60, .35); margin: 4px 0; }
+  .center .ju small { font-size: 12px; color: var(--ink-dim); letter-spacing: .2em; display: block; margin-top: 4px; text-shadow: none; }
+  .center .meta { font-size: 12px; color: #cbbde0; line-height: 1.9; letter-spacing: .08em; margin-top: 6px; }
+  .center .meta b { color: var(--gold); font-weight: 600; }
+  .center .taiji { position: absolute; width: 74px; height: 74px; opacity: .35; pointer-events: none; animation: spin 40s linear infinite; }
+  .center .taiji svg { width: 100%; height: 100%; }
+
+  /* 底部说明 */
+  footer { margin-top: 26px; text-align: center; font-size: 11px; color: rgba(180, 165, 140, .7); line-height: 1.9; letter-spacing: .05em; }
+  footer a { color: var(--gold-dim); text-decoration: none; border-bottom: 1px dotted var(--gold-line); }
+
+  /* 手机适配 */
+  @media (max-width: 640px) {
+    .board { gap: 5px; padding: 6px; }
+    .cell { min-height: 96px; padding: 6px 3px; border-radius: 9px; }
+    .mstar { font-size: 14px; }
+    .sstar { font-size: 10px; }
+    .cell .gz, .cell .pname { font-size: 11px; }
+    .center { min-height: 210px; border-radius: 50%; }
+    .center .pillars { font-size: 14px; }
+    .center .ju { font-size: 19px; }
+    .center .meta { font-size: 11px; }
+    .center .taiji { width: 52px; height: 52px; }
+  }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="wrap">
+  <header>
+    <div class="title">紫微斗数<small>天命星盘 · 安星法排盘</small></div>
+    <div class="divider"></div>
+  </header>
+
+  <div class="form" id="form">
+    <div class="field"><label>公历 年</label><input type="number" id="y" value="1990" min="1900" max="2100"></div>
+    <div class="field"><label>月</label><input type="number" id="m" value="6" min="1" max="12"></div>
+    <div class="field"><label>日</label><input type="number" id="d" value="15" min="1" max="31"></div>
+    <div class="field">
+      <label>时辰</label>
+      <select id="h">
+        <option value="0">子时 23:00–01:00</option>
+        <option value="1">丑时 01:00–03:00</option>
+        <option value="2" selected>寅时 03:00–05:00</option>
+        <option value="3">卯时 05:00–07:00</option>
+        <option value="4">辰时 07:00–09:00</option>
+        <option value="5">巳时 09:00–11:00</option>
+        <option value="6">午时 11:00–13:00</option>
+        <option value="7">未时 13:00–15:00</option>
+        <option value="8">申时 15:00–17:00</option>
+        <option value="9">酉时 17:00–19:00</option>
+        <option value="10">戌时 19:00–21:00</option>
+        <option value="11">亥时 21:00–23:00</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>性别</label>
+      <select id="g"><option value="male" selected>男</option><option value="female">女</option></select>
+    </div>
+    <div class="field">
+      <label>年界</label>
+      <select id="yr"><option value="lichun" selected>立春（主流）</option><option value="newyear">正月初一</option></select>
+    </div>
+    <div class="field">
+      <label>闰月</label>
+      <select id="lr"><option value="zhongzhou" selected>中州派（十五分界）</option><option value="jingcheng">精成（作下月）</option></select>
+    </div>
+    <button class="btn" id="go">起 盘</button>
+  </div>
+
+  <div class="board-wrap">
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <div class="board" id="board"></div>
+  </div>
+
+  <footer>
+    紫微斗数排盘 · 依据《紫微斗数全书》安星法及王亭之《中州派紫微斗数》<br>
+    农历与节气数据 1900–2100 来源于开源项目 <a href="https://github.com/JJonline/solarlunar" target="_blank">solarlunar</a>（MIT License）· 仅供传统文化研究与学习
+  </footer>
+</div>
+
+<script src="./ziwei-pan.js"></script>
+<script>
+(function () {
+  'use strict';
+  var Z = window.ZiWeiPan;
+  var BOARD = { // 地支序 → [列, 行]（1-based）
+    5: [1, 1], 6: [2, 1], 7: [3, 1], 8: [4, 1],
+    4: [1, 2],                                 9: [4, 2],
+    3: [1, 3],                                 10: [4, 3],
+    2: [1, 4], 1: [2, 4], 0: [3, 4], 11: [4, 4]
+  };
+  var MAIN_ORDER = ['紫微', '天机', '太阳', '武曲', '天同', '廉贞', '天府', '太阴', '贪狼', '巨门', '天相', '天梁', '七杀', '破军'];
+  var MINOR_ORDER = ['左辅', '右弼', '文昌', '文曲', '天魁', '天钺', '禄存', '擎羊', '陀罗', '火星', '铃星', '地空', '地劫', '天马'];
+  var HUA_CLS = { '禄': 'lu', '权': 'quan', '科': 'ke', '忌': 'ji' };
+  var HUA_SHORT = { '禄': '禄', '权': '权', '科': '科', '忌': '忌' };
+  var SHICHEN = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+
+  var boardEl = document.getElementById('board');
+
+  function render() {
+    var y = +document.getElementById('y').value;
+    var m = +document.getElementById('m').value;
+    var d = +document.getElementById('d').value;
+    var h = +document.getElementById('h').value;
+    var g = document.getElementById('g').value;
+    var yr = document.getElementById('yr').value;
+    var lr = document.getElementById('lr').value;
+    var r = Z.calc({ year: y, month: m, day: d, hourIndex: h, gender: g, yearRule: yr, leapRule: lr });
+    if (!r) { boardEl.innerHTML = '<div class="center" style="grid-column:1/5;grid-row:1/5;border-radius:14px;">出生日期需在 1900-02-01 至 2100-12-31 之间</div>'; return; }
+
+    var cells = {};
+    r.palaces.forEach(function (p) {
+      var pos = BOARD[Z.ZHI.indexOf(p.zhi)];
+      cells[Z.ZHI.indexOf(p.zhi)] = {
+        col: pos[0], row: pos[1],
+        gz: p.gan + p.zhi,
+        name: p.name,
+        ming: p.isMing, shen: p.isShen,
+        mains: p.mainStars.slice().sort(function (a, b) { return MAIN_ORDER.indexOf(a) - MAIN_ORDER.indexOf(b); }),
+        minors: p.minorStars.slice().sort(function (a, b) { return MINOR_ORDER.indexOf(a) - MINOR_ORDER.indexOf(b); }),
+        sihua: p.sihua,
+        limit: p.limit
+      };
+    });
+
+    var html = [];
+    for (var zhi = 0; zhi < 12; zhi++) {
+      var c = cells[zhi];
+      if (!c) continue;
+      var huaMap = {};
+      c.sihua.forEach(function (sh) { huaMap[sh.star] = sh.hua; });
+      var mains = c.mains.map(function (star) {
+        var hua = huaMap[star];
+        return '<span class="mstar">' + star + (hua ? '<i class="hua ' + HUA_CLS[hua] + '">' + HUA_SHORT[hua] + '</i>' : '') + '</span>';
+      }).join('');
+      var minors = c.minors.map(function (star) { return '<span class="sstar">' + star + '</span>'; }).join('');
+      var tags = (c.ming ? '<span class="tag ming">命</span>' : '') + (c.shen ? '<span class="tag shen">身</span>' : '');
+      html.push(
+        '<div class="cell" style="grid-column:' + c.col + ';grid-row:' + c.row + ';">' +
+          '<div class="gz">' + c.gz + '</div>' +
+          '<div class="pname">' + c.name + tags + '</div>' +
+          '<div class="mains">' + mains + '</div>' +
+          '<div class="minors">' + minors + '</div>' +
+          '<div class="limit">大限 ' + c.limit + '</div>' +
+        '</div>'
+      );
+    }
+
+    var lunarText = r.lunar.lYear + ' 年 ' + (r.lunar.isLeap ? '闰' : '') + r.lunar.lMonth + ' 月 ' + r.lunar.lDay + ' 日';
+    var pillarText = r.pillars.year + '年 ' + r.pillars.month + '月 ' + r.pillars.day + '日 ' + r.pillars.hour + '时';
+    var dirText = r.limitForward ? '大限顺行' : '大限逆行';
+    html.push(
+      '<div class="center">' +
+        '<div class="taiji"><svg viewBox="0 0 100 100"><path d="M50 0a50 50 0 0 0 0 100 40 40 0 0 1 0-80 40 40 0 0 0 0-20z" fill="#ffd76a"/><path d="M50 100a50 50 0 0 0 0-100 40 40 0 0 1 0 80 40 40 0 0 0 0 20z" fill="#1a1240"/><circle cx="50" cy="30" r="8" fill="#1a1240"/><circle cx="50" cy="70" r="8" fill="#ffd76a"/></svg></div>' +
+        '<div class="lunar">' + lunarText + ' · ' + SHICHEN[h] + '时</div>' +
+        '<div class="pillars">' + pillarText + '</div>' +
+        '<div class="ju">' + r.ju + '<small>命宫 ' + r.mingGz + ' · ' + r.nayin + '</small></div>' +
+        '<div class="meta">命主 <b>' + r.mingZhu + '</b>　身主 <b>' + r.shenZhu + '</b><br>' + dirText + '（起 ' + r.juNum + ' 岁）</div>' +
+      '</div>'
+    );
+
+    boardEl.innerHTML = html.join('');
+  }
+
+  document.getElementById('go').addEventListener('click', render);
+  ['y', 'm', 'd', 'h', 'g', 'yr', 'lr'].forEach(function (id) {
+    var el = document.getElementById(id);
+    el.addEventListener('change', render);
+  });
+  render();
+})();
+</script>
+</body>
+</html>

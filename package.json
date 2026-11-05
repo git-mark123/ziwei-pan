@@ -1,0 +1,16 @@
+{
+  "name": "ziwei-pan",
+  "version": "1.0.0",
+  "description": "紫微斗数排盘工具：输入公历生辰与时辰，排出完整十二宫命盘（十四主星、四化、辅星、大限）。零依赖单页应用。",
+  "main": "ziwei-pan.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": ["紫微斗数", "排盘", "ziwei", "astrology", "four-pillars"],
+  "author": "木雁山人",
+  "license": "MIT",
+  "dependencies": {
+    "iztro": "^2.6.4",
+    "solarlunar": "^3.1.0"
+  }
+}
